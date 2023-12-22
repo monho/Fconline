@@ -13,30 +13,8 @@ const FormContainer = styled.form`
     margin-top:15px;
 `;
 
-const Input = styled.input`
-    padding: 5px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
-    font-size:16px;
-    margin-left: 15px;
-    margin-right: 8px;
-    border: none;
-    border-radius: 4px;
-    outline: none; /* 포커스 시 outline 제거 */
-    width: 100%;
-`;
 
-const Button = styled.button`
-  padding: 8px 12px;
-  color: #717171;
-  border: none;
-  background:none;
-  cursor: pointer;
-  font-size:20px;
-`;
-
-function SearchForm() {
+function RankChart() {
     const [inputValue, setInputValue] = useState('');
 
     const handleSubmit = (e) => {
