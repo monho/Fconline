@@ -1,15 +1,23 @@
 import React from 'react';
 import styled from "styled-components";
+import RankChart from './RankChart';
 
 const Warp = styled.div`
-  babkground-color:#222;
+    display: flex;
+    width: 1080px;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
 `;
 
 
 
 function Content() {
     return (
-       <Warp></Warp>
+       <Warp>
+        <RankChart />
+        <RankChart />
+       </Warp>
     );
 }
 export default Content;
