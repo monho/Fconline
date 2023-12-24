@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import styled from "styled-components";
 
 const ChartTable = styled.form`
@@ -65,58 +65,41 @@ const Tablebodyareatext = styled.td`
   }
 `;
 function RankChart() {
-    const [data, setData] = useState([]);
+  const [data, setData] = useState([]);
 
-    useEffect(() => {
-      const fetchData = async () => {
-        try {
-          // 페이지 접속 후 한 번만 호출
-          const response = await axios.get('http://localhost:3005/crawlTop5Data');
-          setData(response.data.crawledData);
-        } catch (error) {
-          console.error('Error fetching data:', error);
-        }
-      };
-  
-      fetchData();
-    }, []); // 빈 배열을 전달하여 처음 렌더링 시에만 실행
-  
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // 페이지 접속 후 한 번만 호출
+        const response = await axios.get("http://localhost:3005/crawlTop5Data");
+        setData(response.data.crawledData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
 
+    fetchData();
+  }, []); // 빈 배열을 전달하여 처음 렌더링 시에만 실행
 
-    return (
-        <ChartTable>
-            <TableHeade>
-                <HeaderItem>
-                    <HeaderItemText>
-                        순위
-                    </HeaderItemText>
-                    <HeaderItemText>
-                        구단주명
-                    </HeaderItemText>
-                    <HeaderItemText>
-                        랭크포인트
-                    </HeaderItemText>
-                </HeaderItem>
-            </TableHeade>
-            <Tablebody>
-                {data.map((item, index) =>(
-                    <Tablebodyarea key={index}>
-                    <Tablebodyareatext > 
-                    {item.rankNo}
-                    </Tablebodyareatext>
-                    <Tablebodyareatext > 
-                    {item.name}
-                    </Tablebodyareatext>
-                    <Tablebodyareatext > 
-                    {item.rankRWinPoint}
-                    </Tablebodyareatext>
-                </Tablebodyarea>
-
-                ))}
-                
-               
-            </Tablebody>
-        </ChartTable>
-    );
+  return (
+    <ChartTable>
+      <TableHeade>
+        <HeaderItem>
+          <HeaderItemText>순위</HeaderItemText>
+          <HeaderItemText>구단주명</HeaderItemText>
+          <HeaderItemText>랭크포인트</HeaderItemText>
+        </HeaderItem>
+      </TableHeade>
+      <Tablebody>
+        {data.map((item, index) => (
+          <Tablebodyarea key={index}>
+            <Tablebodyareatext>{item.rankNo}</Tablebodyareatext>
+            <Tablebodyareatext>{item.name}</Tablebodyareatext>
+            <Tablebodyareatext>{item.rankRWinPoint}</Tablebodyareatext>
+          </Tablebodyarea>
+        ))}
+      </Tablebody>
+    </ChartTable>
+  );
 }
 export default RankChart;

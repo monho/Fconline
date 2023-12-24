@@ -1,8 +1,15 @@
 import React from "react";
-import { Outlet, RouterProvider, createBrowserRouter } from "react-router-dom";
+import {
+  Outlet,
+  RouterProvider,
+  createBrowserRouter,
+  BrowserRouter as Router,
+  Route,
+  Routes,
+} from "react-router-dom";
 import Default from "./components/Default";
-
-
+import UserInfo from "./components/content/UserInfo";
+import SearchForm from "./components/header/SearchForm";
 
 function App() {
   const router = createBrowserRouter([
@@ -10,17 +17,20 @@ function App() {
       path: "/",
       element: (
         <>
-          <Default />
+          <UserInfo />
         </>
       ),
       children: [],
-    }
+    },
   ]);
 
   return (
-    <div>
-      <RouterProvider router={router} />
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Default />} />
+        <Route path="/userinfo" element={<UserInfo />} />
+      </Routes>
+    </Router>
   );
 }
 export default App;
