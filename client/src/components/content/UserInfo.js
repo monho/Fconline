@@ -52,6 +52,12 @@ const UserNameText = styled.div`
   vertical-align: middle;
   font-size: 23px;
 `;
+const UserDivisionText = styled.div`
+  color: #fff;
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 16px;
+`;
 const UserLvlText = styled.div`
   margin-left: 5px;
   background-color: #191d2c;
@@ -78,55 +84,54 @@ function UserInfo() {
   const [userInfo, setUserInfo] = useState("");
   const [usermaxdivisionInfo, setUsermaxdivisionInfo] = useState("");
   const [divisionImgData, setDivisionImgData] = useState(""); // 추가
+  const [divisionnamedata, setDivisionnameData] = useState(""); // 추가
   const location = useLocation();
   const setUserOuid = location.state?.userOuid;
-
+  console.log("데이터 입니다.::" + JSON.stringify(location.state));
   const handleSubmit = async () => {
     if (!setUserOuid) {
       return;
     }
 
     try {
-      const response = await axios.get(
-        BaseApiUrl.baseURL + "/fconline/v1/user/basic?ouid=" + setUserOuid,
-        { headers }
-      );
-
-      const maxdivision = await axios.get(
-        BaseApiUrl.baseURL +
-          "/fconline/v1/user/maxdivision?ouid=" +
-          setUserOuid,
-        { headers }
-      );
-      const filteredData = maxdivision.data.filter(
-        (item) => item.matchType === 50
-      );
-
-      if (filteredData.length > 0) {
-        const { division } = filteredData[0]; // 첫 번째 매치만 가져오기
-        // division.json 파일에서 divisionId 값과 비교하여 같으면 해당 이미지 경로를 가져오기
-
-        console.log(division);
-        const matchingIndex = divisionData.findIndex(
-          (item) => item.divisionId === division
-        );
-
-        if (matchingIndex !== -1) {
-          const divisionImg = divisionData[matchingIndex].divisionIcon;
-          setDivisionImgData(divisionImg); // 상태 업데이트
-        } else {
-          console.warn(
-            "매치 타입이 50인 객체가 있으나 division.json에 해당 divisionId가 없습니다."
-          );
-        }
-
-        setUserInfo(response.data);
-        setUsermaxdivisionInfo(maxdivision.data);
-      } else {
-      }
-      const { matchType } = response.data; // level과 nickname 추출
-      setUserInfo(response.data);
-      setUsermaxdivisionInfo(maxdivision.data);
+      // const response = await axios.post('/api/userinfo/getuserinfo', {})
+      // const response = await axios.get(
+      //   BaseApiUrl.baseURL + "/fconline/v1/user/basic?ouid=" + setUserOuid,
+      //   { headers }
+      // );
+      // const maxdivision = await axios.get(
+      //   BaseApiUrl.baseURL +
+      //     "/fconline/v1/user/maxdivision?ouid=" +
+      //     setUserOuid,
+      //   { headers }
+      // );
+      // const filteredData = maxdivision.data.filter(
+      //   (item) => item.matchType === 50
+      // );
+      // if (filteredData.length > 0) {
+      //   const { division } = filteredData[0]; // 첫 번째 매치만 가져오기
+      //   // division.json 파일에서 divisionId 값과 비교하여 같으면 해당 이미지 경로를 가져오기
+      //   console.log(division);
+      //   const matchingIndex = divisionData.findIndex(
+      //     (item) => item.divisionId === division
+      //   );
+      //   if (matchingIndex !== -1) {
+      //     const divisionImg = divisionData[matchingIndex].divisionIcon;
+      //     const divisionText = divisionData[matchingIndex].divisionName;
+      //     setDivisionImgData(divisionImg); // 상태 업데이트
+      //     setDivisionnameData(divisionText);
+      //   } else {
+      //     console.warn(
+      //       "매치 타입이 50인 객체가 있으나 division.json에 해당 divisionId가 없습니다."
+      //     );
+      //   }
+      //   setUserInfo(response.data);
+      //   setUsermaxdivisionInfo(maxdivision.data);
+      // } else {
+      // }
+      // const { matchType } = response.data; // level과 nickname 추출
+      // setUserInfo(response.data);
+      // setUsermaxdivisionInfo(maxdivision.data);
     } catch (error) {
       console.error("API 호출 중 에러 발생:", error);
     }
@@ -152,6 +157,7 @@ function UserInfo() {
               </UserNameText>
               <UserLvlText>구단주 레벨: &nbsp;{userInfo.level}</UserLvlText>
             </UserNamearea>
+            <UserDivisionText>역대등급:{divisionnamedata}</UserDivisionText>
           </UserInfoArea>
         </CardWarp>
         <MatchTitle>최근 히스토리</MatchTitle>

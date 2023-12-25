@@ -47,21 +47,39 @@ function SearchForm() {
   const [inputValue, setInputValue] = useState("");
   const navigate = useNavigate(); // useNavigate 사용
   const [error, setError] = useState(""); // 추가: 에러 상태
+
+  const handleInputChange = (event) => {
+    setInputValue(event.target.value);
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     if (!inputValue.trim()) return;
     try {
-      const response = await axios.get(
-        BaseApiUrl.baseURL + "/fconline/v1/id?nickname=" + inputValue,
-        { headers }
-      );
-      setUserOuid(response.data);
+      // const response = await axios.get(
+      //   BaseApiUrl.baseURL + "/fconline/v1/id?nickname=" + inputValue,
+      //   { headers }
+      // );
+      // setUserOuid(response.data);
+      // const apiUrl = "http://localhost:8080/api/userinfo";
+      // const response = await axios.post(`${apiUrl}?nickname=${inputValue}`);
 
-      const { ouid } = response.data;
+      const apiUrl = "http://localhost:8080/api/userinfo/getuserinfo"; // 수정: /api/userinfo 경로 추가
+      const response = await axios.post(apiUrl, {
+        message: inputValue,
+      });
+      // 서버 응답 데이터 구조를 확인하고 적절하게 처리
+      console.log(response.data.status); // "Message received successfully!"
+      // 서버에서 받은 데이터
+      const serverData = response.data;
 
+      // getInfo 데이터에 접근
+      const getInfoData = serverData;
+      const { UserNmae, level, ouid } = serverData;
+      console.log(getInfoData);
       // 다른 컴포넌트로 이동
-      navigate("/userinfo", { state: { userOuid: ouid } });
+      navigate("/userinfo", { state: { userOuid: ouid, UserNmae, level } });
     } catch (error) {
       // API 오류 처리
       if (
