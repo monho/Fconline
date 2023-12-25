@@ -4,8 +4,9 @@ import styled from "styled-components";
 import SearchForm from "../header/SearchForm";
 import { BaseApiUrl, headers } from "../../apibase/Baseinfo";
 import { useLocation } from "react-router-dom";
-import divisionData from "./division.json";
+import divisionData from "./division";
 import MatchHistoryCard from "./MatchHistory";
+import DIVISION_DATAS from "./division";
 const Warp = styled.div`
   margin-top: 15px;
   margin-left: auto;
@@ -79,89 +80,105 @@ const MatchTitle = styled.h3`
   line-height: 16px;
   margin-bottom: 25px;
 `;
-
+const OtherBtn = styled.button`
+  margin-top: 8px;
+  border-width: 1px;
+  border-style: solid;
+  border-image: initial;
+  border-color: #424254;
+  background-color: #424254;
+  border-radius: 4px;
+  display: block;
+  width: 1188px;
+  height: 40px;
+  padding: 8px 0px;
+  color: #fff;
+  font-size: 13px;
+  text-align: center;
+  text-decoration: none;
+  box-sizing: border-box;
+  cursor: pointer;
+`;
 function UserInfo() {
   const [userInfo, setUserInfo] = useState("");
   const [usermaxdivisionInfo, setUsermaxdivisionInfo] = useState("");
   const [divisionImgData, setDivisionImgData] = useState(""); // 추가
   const [divisionnamedata, setDivisionnameData] = useState(""); // 추가
+  const [divisionInfo, setDivisionInfo] = useState({}); // 추가
+
+  const [limit, setmatchlimit] = useState("");
+
   const location = useLocation();
-  const setUserOuid = location.state?.userOuid;
-  console.log("데이터 입니다.::" + JSON.stringify(location.state));
-  const handleSubmit = async () => {
-    if (!setUserOuid) {
+  const setUserOuid = location.state?.ouid;
+  const setUserName = location.state?.UserName;
+  const setUserLevel = location.state?.level;
+  const setachievementDate = location.state?.achievementDate;
+  const setUmatchType = location.state?.matchType;
+  const setdivision = location.state?.division;
+  const nickname = location.state?.nickname;
+
+  const TestURl = "http://localhost:8080/api/userinfo/getuserinfo";
+  const ServiceURL =
+    "https://fconline-node-xwgh.vercel.app/api/userinfo/getuserinfo";
+
+  useEffect(() => {
+    if (!setdivision) return;
+    const divisionData = DIVISION_DATAS.find(
+      (divisionData) => divisionData.divisionId === setdivision
+    );
+    setDivisionInfo(divisionData);
+  }, [setdivision]);
+
+  const handleLoadMore = async (event) => {
+    if (!event || !event.currentTarget) {
       return;
     }
-
-    try {
-      // const response = await axios.post('/api/userinfo/getuserinfo', {})
-      // const response = await axios.get(
-      //   BaseApiUrl.baseURL + "/fconline/v1/user/basic?ouid=" + setUserOuid,
-      //   { headers }
-      // );
-      // const maxdivision = await axios.get(
-      //   BaseApiUrl.baseURL +
-      //     "/fconline/v1/user/maxdivision?ouid=" +
-      //     setUserOuid,
-      //   { headers }
-      // );
-      // const filteredData = maxdivision.data.filter(
-      //   (item) => item.matchType === 50
-      // );
-      // if (filteredData.length > 0) {
-      //   const { division } = filteredData[0]; // 첫 번째 매치만 가져오기
-      //   // division.json 파일에서 divisionId 값과 비교하여 같으면 해당 이미지 경로를 가져오기
-      //   console.log(division);
-      //   const matchingIndex = divisionData.findIndex(
-      //     (item) => item.divisionId === division
-      //   );
-      //   if (matchingIndex !== -1) {
-      //     const divisionImg = divisionData[matchingIndex].divisionIcon;
-      //     const divisionText = divisionData[matchingIndex].divisionName;
-      //     setDivisionImgData(divisionImg); // 상태 업데이트
-      //     setDivisionnameData(divisionText);
-      //   } else {
-      //     console.warn(
-      //       "매치 타입이 50인 객체가 있으나 division.json에 해당 divisionId가 없습니다."
-      //     );
-      //   }
-      //   setUserInfo(response.data);
-      //   setUsermaxdivisionInfo(maxdivision.data);
-      // } else {
-      // }
-      // const { matchType } = response.data; // level과 nickname 추출
-      // setUserInfo(response.data);
-      // setUsermaxdivisionInfo(maxdivision.data);
-    } catch (error) {
-      console.error("API 호출 중 에러 발생:", error);
+    const currentIndex = parseInt(
+      event.currentTarget.getAttribute("data-index")
+    );
+    // const apiUrl = TestURl;
+    // const response = await axios.post(apiUrl, {
+    //   message: nickname,
+    //   currentIndex: currentIndex,
+    // });
+    // console.log(response.data);
+    // Check if currentIndex is not NaN before updating
+    if (!isNaN(currentIndex)) {
+      event.currentTarget?.setAttribute("data-index", `${currentIndex + 1}`);
+      console.log(currentIndex);
     }
+    //getAttribute 잘 작동되는데 setAttribute는 안됌
   };
 
   useEffect(() => {
     // 컴포넌트가 처음 로드될 때 한 번 실행
-    handleSubmit();
   }, []); // 빈 배열을 전달하여 의존성 배열이 비어있으므로 한 번만 실행
 
   return (
     <>
       <Warp>
         <CardWarp>
+          {/* 사용자 정보 표시 */}
           <TierImage>
-            <TierMark src={divisionImgData} />
+            <TierMark src={divisionInfo?.divisionIcon} />
           </TierImage>
           <UserInfoArea>
             <UserNamearea>
               <UserNameText>
-                {usermaxdivisionInfo.matchType}
-                {userInfo.nickname}
+                {setUserName} {/* 사용자 이름 표시 */}
               </UserNameText>
-              <UserLvlText>구단주 레벨: &nbsp;{userInfo.level}</UserLvlText>
+              <UserLvlText>구단주 레벨: &nbsp;{setUserLevel}</UserLvlText>
             </UserNamearea>
-            <UserDivisionText>역대등급:{divisionnamedata}</UserDivisionText>
+            <UserDivisionText>
+              역대등급:{divisionInfo?.divisionName}
+            </UserDivisionText>
           </UserInfoArea>
         </CardWarp>
         <MatchTitle>최근 히스토리</MatchTitle>
         <MatchHistoryCard />
+        <OtherBtn data-index="1" onClick={handleLoadMore}>
+          더보기
+        </OtherBtn>
       </Warp>
     </>
   );

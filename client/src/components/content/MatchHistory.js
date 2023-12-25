@@ -94,54 +94,26 @@ const MatchInfoLink = styled.a`
   justify-content: center;
 `;
 
+const OtherBtn = styled.button`
+  margin-top: 8px;
+  border-width: 1px;
+  border-style: solid;
+  border-image: initial;
+  border-color: var(--gray250);
+  background-color: var(--gray0);
+  border-radius: 4px;
+  display: block;
+  width: 100%;
+  height: 40px;
+  padding: 8px 0px;
+  color: var(--gray900);
+  font-size: 13px;
+  text-align: center;
+  text-decoration: none;
+  box-sizing: border-box;
+`;
+
 function MatchHistoryCard() {
-  const [matchDetails, setMatchDetails] = useState([]);
-  const location = useLocation();
-  const setUserOuid = location.state?.userOuid;
-
-  useEffect(() => {
-    const fetchMatches = async () => {
-      if (!setUserOuid) {
-        return;
-      }
-
-      try {
-        const response = await axios.get(
-          BaseApiUrl.baseURL +
-            "/fconline/v1/user/match?ouid=" +
-            setUserOuid +
-            "&matchtype=50&offset=0&limit=20",
-          { headers }
-        );
-
-        // Extract match IDs from the response
-        const matchIds = response.data;
-
-        // Fetch details for each match ID
-        const detailsPromises = matchIds.map(async (matchId) => {
-          const matchDetailResponse = await axios.get(
-            BaseApiUrl.baseURL +
-              "/fconline/v1/match-detai2l?matchid=" +
-              matchId,
-            { headers }
-          );
-          return matchDetailResponse.data;
-        });
-
-        // Wait for all match details to be fetched
-        const matchDetails = await Promise.all(detailsPromises);
-
-        // Set the match details in the state
-        setMatchDetails(matchDetails);
-      } catch (error) {
-        console.error("API 호출 중 에러 발생:", error);
-      }
-    };
-
-    // Fetch matches when the component mounts
-    fetchMatches();
-  }, [setUserOuid]);
-
   return (
     <CardWarp>
       <MatchResultbar />

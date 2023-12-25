@@ -48,6 +48,9 @@ function SearchForm() {
   const navigate = useNavigate(); // useNavigate 사용
   const [error, setError] = useState(""); // 추가: 에러 상태
 
+  const TestURl = "http://localhost:8080/api/userinfo/getuserinfo";
+  const ServiceURL =
+    "https://fconline-node-xwgh.vercel.app/api/userinfo/getuserinfo";
   const handleInputChange = (event) => {
     setInputValue(event.target.value);
   };
@@ -65,7 +68,7 @@ function SearchForm() {
       // const apiUrl = "http://localhost:8080/api/userinfo";
       // const response = await axios.post(`${apiUrl}?nickname=${inputValue}`);
 
-      const apiUrl = "http://localhost:8080/api/userinfo/getuserinfo"; // 수정: /api/userinfo 경로 추가
+      const apiUrl = TestURl; // 수정: /api/userinfo 경로 추가
       const response = await axios.post(apiUrl, {
         message: inputValue,
       });
@@ -76,10 +79,21 @@ function SearchForm() {
 
       // getInfo 데이터에 접근
       const getInfoData = serverData;
-      const { UserNmae, level, ouid } = serverData;
+      const {
+        UserName,
+        level,
+        ouid,
+        maxDivision,
+        matchType,
+        division,
+        achievementDate,
+        matchids,
+      } = serverData;
       console.log(getInfoData);
       // 다른 컴포넌트로 이동
-      navigate("/userinfo", { state: { userOuid: ouid, UserNmae, level } });
+      navigate("/userinfo", {
+        state: { ...serverData, nickname: inputValue },
+      });
     } catch (error) {
       // API 오류 처리
       if (
