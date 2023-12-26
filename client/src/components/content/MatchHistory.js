@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import styled from "styled-components";
-import { BaseApiUrl, headers } from "../../apibase/Baseinfo";
 import { useLocation } from "react-router-dom";
-
+import DIVISION_DATAS from "./division";
 const CardWarp = styled.div`
   width: 100%;
   height: 120px;
@@ -29,12 +28,14 @@ const MatchCardLeft = styled.div`
   padding-left: 24px;
   width: 130px;
 `;
+
 const MatchCarduser = styled.div`
   display: flex;
   flex-direction: row;
   flex-grow: 1;
   align-content: center;
 `;
+
 const MatchView = styled.div`
   height: 100%;
   position: absolute;
@@ -43,6 +44,7 @@ const MatchView = styled.div`
   width: 40px;
   background-color: #833f3f;
 `;
+
 const MatchResultbar = styled.div`
   background-color: #b93a3a;
   height: 100%;
@@ -51,6 +53,7 @@ const MatchResultbar = styled.div`
   top: 0;
   width: 8px;
 `;
+
 const MatchResultText = styled.div`
   font-size: 14px;
   margin-bottom: 5px;
@@ -58,12 +61,21 @@ const MatchResultText = styled.div`
   line-height: 14px;
   color: #fd8282;
 `;
+
 const MatchTypeText = styled.div`
   font-size: 14px;
   line-height: 12px;
   margin-bottom: 5px;
   color: #bcbcc8;
 `;
+
+const MatchDivisionText = styled.div`
+  font-size: 14px;
+  line-height: 12px;
+  margin-bottom: 5px;
+  color: #bcbcc8;
+`;
+
 const MatchDateTime = styled.div`
   font-size: 14px;
   line-height: 12px;
@@ -94,36 +106,38 @@ const MatchInfoLink = styled.a`
   justify-content: center;
 `;
 
-const OtherBtn = styled.button`
-  margin-top: 8px;
-  border-width: 1px;
-  border-style: solid;
-  border-image: initial;
-  border-color: var(--gray250);
-  background-color: var(--gray0);
-  border-radius: 4px;
-  display: block;
-  width: 100%;
-  height: 40px;
-  padding: 8px 0px;
-  color: var(--gray900);
-  font-size: 13px;
-  text-align: center;
-  text-decoration: none;
-  box-sizing: border-box;
-`;
 
-function MatchHistoryCard() {
+function MatchHistoryCard({ matchDetailsProp }) {
+  const [divisionInfo, setDivisionInfo] = useState({});
+  const location = useLocation();
+  const UserName = location.state?.UserName;
+  const matchDetails = location.state?.matchDetails;
+  const ouid = location.state?.ouid;
+  const division = location.state?.division;
+
+  useEffect(() => {
+    const divisionData = DIVISION_DATAS.find(
+      (divisionData) => divisionData.divisionId === division
+    );
+    setDivisionInfo(divisionData);
+  }, [division]);
+  let cleanDivisionName = divisionInfo?.divisionName;
+
+  // 숫자가 있는 경우에만 숫자를 제거
+  if (/\d+/.test(cleanDivisionName)) {
+    cleanDivisionName = cleanDivisionName.replace(/\d+/g, '');
+  }
   return (
     <CardWarp>
       <MatchResultbar />
       <MatchCardLeft>
         <MatchResultText>패배</MatchResultText>
         <MatchTypeText>공식경기</MatchTypeText>
+        <MatchDivisionText>{cleanDivisionName} 구간</MatchDivisionText>
         <MatchDateTime>3시간 전</MatchDateTime>
       </MatchCardLeft>
       <MatchCarduser>
-        <MatchTeam>성욕폭발스님</MatchTeam>
+        <MatchTeam>{UserName}</MatchTeam>
         <MatchVS>VS</MatchVS>
         <MatchTeam>코어플라넷</MatchTeam>
       </MatchCarduser>
@@ -135,4 +149,5 @@ function MatchHistoryCard() {
     </CardWarp>
   );
 }
+
 export default MatchHistoryCard;

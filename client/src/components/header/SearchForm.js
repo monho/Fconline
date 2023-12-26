@@ -1,10 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { API_KEY, BaseApiUrl, headers } from "../../apibase/Baseinfo";
 import axios from "axios";
-
-import UserInfo from "../content/UserInfo";
 
 const FormContainer = styled.form`
   display: flex;
@@ -42,15 +39,12 @@ const Button = styled.button`
 `;
 
 function SearchForm() {
-  const [userOuid, setUserOuid] = useState("");
-  const [userinfo, setUserInfo] = useState("");
   const [inputValue, setInputValue] = useState("");
-  const navigate = useNavigate(); // useNavigate 사용
-  const [error, setError] = useState(""); // 추가: 에러 상태
+  const navigate = useNavigate();
+  const [error, setError] = useState("");
 
-  const TestURl = "http://localhost:8080/api/userinfo/getuserinfo";
-  const ServiceURL =
-    "https://fconline-node-xwgh.vercel.app/api/userinfo/getuserinfo";
+  const apiUrl = "http://localhost:8080/api/userinfo/getuserinfo";
+
   const handleInputChange = (event) => {
     setInputValue(event.target.value);
   };
@@ -60,25 +54,12 @@ function SearchForm() {
 
     if (!inputValue.trim()) return;
     try {
-      // const response = await axios.get(
-      //   BaseApiUrl.baseURL + "/fconline/v1/id?nickname=" + inputValue,
-      //   { headers }
-      // );
-      // setUserOuid(response.data);
-      // const apiUrl = "http://localhost:8080/api/userinfo";
-      // const response = await axios.post(`${apiUrl}?nickname=${inputValue}`);
-
-      const apiUrl = TestURl; // 수정: /api/userinfo 경로 추가
       const response = await axios.post(apiUrl, {
         message: inputValue,
       });
-      // 서버 응답 데이터 구조를 확인하고 적절하게 처리
-      console.log(response.data.status); // "Message received successfully!"
-      // 서버에서 받은 데이터
+
       const serverData = response.data;
 
-      // getInfo 데이터에 접근
-      const getInfoData = serverData;
       const {
         UserName,
         level,
@@ -87,15 +68,15 @@ function SearchForm() {
         matchType,
         division,
         achievementDate,
-        matchids,
+        matchDetails,
       } = serverData;
-      console.log(getInfoData);
-      // 다른 컴포넌트로 이동
+
+      // console.log("Match Details:", matchDetails);
+
       navigate("/userinfo", {
         state: { ...serverData, nickname: inputValue },
       });
     } catch (error) {
-      // API 오류 처리
       if (
         error.response &&
         error.response.data &&
@@ -119,6 +100,7 @@ function SearchForm() {
       <Button type="submit">
         <i className="fas fa-search"></i>
       </Button>
+      
     </FormContainer>
   );
 }

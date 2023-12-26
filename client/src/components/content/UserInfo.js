@@ -106,6 +106,9 @@ function UserInfo() {
   const [divisionnamedata, setDivisionnameData] = useState(""); // 추가
   const [divisionInfo, setDivisionInfo] = useState({}); // 추가
 
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+
   const [limit, setmatchlimit] = useState("");
 
   const location = useLocation();
@@ -130,24 +133,15 @@ function UserInfo() {
   }, [setdivision]);
 
   const handleLoadMore = async (event) => {
-    if (!event || !event.currentTarget) {
-      return;
-    }
-    const currentIndex = parseInt(
-      event.currentTarget.getAttribute("data-index")
-    );
-    // const apiUrl = TestURl;
-    // const response = await axios.post(apiUrl, {
-    //   message: nickname,
-    //   currentIndex: currentIndex,
-    // });
-    // console.log(response.data);
-    // Check if currentIndex is not NaN before updating
-    if (!isNaN(currentIndex)) {
-      event.currentTarget?.setAttribute("data-index", `${currentIndex + 1}`);
-      console.log(currentIndex);
-    }
-    //getAttribute 잘 작동되는데 setAttribute는 안됌
+    const apiUrl = TestURl;
+    const response = await axios.post(apiUrl, {
+      message: nickname,
+      currentIndex: currentIndex,
+    });
+    console.log(response.data);
+
+    // currentIndex 상태를 업데이트하여 리렌더링을 유발
+    setCurrentIndex(currentIndex + 11);
   };
 
   useEffect(() => {
