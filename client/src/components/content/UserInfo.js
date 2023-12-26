@@ -132,7 +132,7 @@ function UserInfo() {
   }, [setdivision]);
 
   const handleLoadMore = async (event) => {
-    const apiUrl = TestURl;
+    const apiUrl = ServiceURL;
     const response = await axios.post(apiUrl, {
       message: nickname,
       currentIndex: currentIndex,
