@@ -109,6 +109,7 @@ const MatchInfoLink = styled.a`
 
 function MatchHistoryCard({ matchDetailsProp }) {
   const [divisionInfo, setDivisionInfo] = useState({});
+  const [matchDetiail, setmatchDetiail] = useState({});
   const location = useLocation();
   const UserName = location.state?.UserName;
   const matchDetails = location.state?.matchDetails;
@@ -116,6 +117,9 @@ function MatchHistoryCard({ matchDetailsProp }) {
   const division = location.state?.division;
 
   useEffect(() => {
+
+
+    
     const divisionData = DIVISION_DATAS.find(
       (divisionData) => divisionData.divisionId === division
     );
