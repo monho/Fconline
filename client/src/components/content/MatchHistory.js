@@ -127,6 +127,9 @@ function MatchHistoryCard({ matchDetailsProp }) {
   if (/\d+/.test(cleanDivisionName)) {
     cleanDivisionName = cleanDivisionName.replace(/\d+/g, '');
   }
+
+
+  
   return (
     <CardWarp>
       <MatchResultbar />
@@ -143,7 +146,7 @@ function MatchHistoryCard({ matchDetailsProp }) {
       </MatchCarduser>
       <MatchView>
         <MatchInfoLink href="#">
-          <i class="fas fa-arrow-right"></i>
+          <i className="fas fa-arrow-right"></i>
         </MatchInfoLink>
       </MatchView>
     </CardWarp>
