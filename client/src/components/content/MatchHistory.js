@@ -12,7 +12,7 @@ const CardWarp = styled.div`
   position: relative;
   gap: 170px;
   background-color: #692525;
-  margin-top:10px;
+  margin-top: 10px;
 `;
 
 const MatchCardLeft = styled.div`
@@ -96,6 +96,11 @@ const MatchVS = styled.div`
   color: #ed6767;
   margin-left: 150px;
   margin-right: 150px;
+  vertical-align: middle;
+  padding-top: 3px;
+  font-weight: bold;
+  align-items: center;
+  text-align: center;
 `;
 
 const MatchInfoLink = styled.a`
@@ -107,54 +112,105 @@ const MatchInfoLink = styled.a`
   justify-content: center;
 `;
 
-
-function MatchHistoryCard({ matchDetailsProp }) {
+function MatchHistoryCard({ matchDetailsProp, onHistoryMatchesUpdate }) {
   const [divisionInfo, setDivisionInfo] = useState({});
   const location = useLocation();
   const UserName = location.state?.UserName;
   const matchDetails = location.state?.matchDetails;
+  const [historyMatches, setHistoryMatches] = useState([]); // 새로운 상태 추가
   const division = location.state?.division;
 
-  useEffect(() => {
-    const divisionData = DIVISION_DATAS.find(
-      (divisionData) => divisionData.divisionId === division
-    );
-    setDivisionInfo(divisionData);
-  }, [division]);
+  useEffect(
+    () => {
+      const divisionData = DIVISION_DATAS.find(
+        (divisionData) => divisionData.divisionId === division
+      );
+      console.log("matchDetails가 변경되었습니다:", matchDetails);
+      setDivisionInfo(divisionData);
+    },
+    [division],
+    [matchDetails]
+  );
 
   let cleanDivisionName = divisionInfo?.divisionName;
 
   // 숫자가 있는 경우에만 숫자를 제거
   if (/\d+/.test(cleanDivisionName)) {
-    cleanDivisionName = cleanDivisionName.replace(/\d+/g, '');
+    cleanDivisionName = cleanDivisionName.replace(/\d+/g, "");
   }
-  const matchname = matchDetails.find(
-    (match) => match.MatchTeam === division
-  );
-
 
   return (
     <>
       {matchDetails.map((match, index) => (
-        <CardWarp key={index} style={{ backgroundColor: match?.matchInfo[0]?.matchDetail?.matchResult === '승' ? '#4a76a3' : '#692525' }}>
-          <MatchResultbar key={index} style={{ backgroundColor: match?.matchInfo[0]?.matchDetail?.matchResult === '승' ? '#3d8ddf' : '#b93a3a' }} />
+        <CardWarp
+          key={index}
+          style={{
+            backgroundColor:
+              match?.matchInfo[0]?.matchDetail?.matchResult === "승"
+                ? "#232b41"
+                : "#3b2020",
+          }}
+        >
+          <MatchResultbar
+            key={index}
+            style={{
+              backgroundColor:
+                match?.matchInfo[0]?.matchDetail?.matchResult === "승"
+                  ? "#3d8ddf"
+                  : "#b93a3a",
+            }}
+          />
           <MatchCardLeft>
-            <MatchResultText>{match?.matchInfo[0]?.matchDetail?.matchResult || '결과 없음'}</MatchResultText>
+            <MatchResultText
+              style={{
+                color:
+                  match?.matchInfo[0]?.matchDetail?.matchResult === "승"
+                    ? "#7fc3ff"
+                    : "##ed6767",
+              }}
+            >
+              {match?.matchInfo[0]?.matchDetail?.matchResult || "결과 없음"}
+            </MatchResultText>
             <MatchTypeText>공식경기</MatchTypeText>
             <MatchDivisionText>{cleanDivisionName} 구간</MatchDivisionText>
-            <MatchDateTime>{match?.matchDate || '날짜 없음'}</MatchDateTime>
+            <MatchDateTime>{match?.matchDate || "날짜 없음"}</MatchDateTime>
           </MatchCardLeft>
           <MatchCarduser>
             <MatchTeam>{UserName}</MatchTeam>
-            <MatchVS style={{ backgroundColor: match?.matchInfo[0]?.matchDetail?.matchResult === '승' ? '#4a76a3' : '#692525', color: match?.matchInfo[0]?.matchDetail?.matchResult === '승' ? '#FFF' : '#ed6767' }}>VS</MatchVS>
+            <MatchVS
+              style={{
+                backgroundColor:
+                  match?.matchInfo[0]?.matchDetail?.matchResult === "승"
+                    ? "#36436f"
+                    : "#692525",
+                color:
+                  match?.matchInfo[0]?.matchDetail?.matchResult === "승"
+                    ? "#7fc3ff"
+                    : "##ed6767",
+              }}
+            >
+              VS
+            </MatchVS>
             <MatchTeam>
               {match?.matchInfo[0]?.nickname === UserName
-                ? match?.matchInfo[1]?.nickname || '상대팀 없음'
-                : match?.matchInfo[0]?.nickname || '상대팀 없음'}
+                ? match?.matchInfo[1]?.nickname || "상대팀 없음"
+                : match?.matchInfo[0]?.nickname || "상대팀 없음"}
             </MatchTeam>
           </MatchCarduser>
           <MatchView>
-            <MatchInfoLink href="#">
+            <MatchInfoLink
+              href="#"
+              style={{
+                backgroundColor:
+                  match?.matchInfo[0]?.matchDetail?.matchResult === "승"
+                    ? "#36436f"
+                    : "#692525",
+                color:
+                  match?.matchInfo[0]?.matchDetail?.matchResult === "승"
+                    ? "#7fc3ff"
+                    : "##ed6767",
+              }}
+            >
               <i className="fas fa-arrow-right"></i>
             </MatchInfoLink>
           </MatchView>
