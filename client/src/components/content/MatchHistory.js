@@ -12,6 +12,7 @@ const CardWarp = styled.div`
   position: relative;
   gap: 170px;
   background-color: #692525;
+  margin-top:10px;
 `;
 
 const MatchCardLeft = styled.div`
@@ -109,52 +110,57 @@ const MatchInfoLink = styled.a`
 
 function MatchHistoryCard({ matchDetailsProp }) {
   const [divisionInfo, setDivisionInfo] = useState({});
-  const [matchDetiail, setmatchDetiail] = useState({});
   const location = useLocation();
   const UserName = location.state?.UserName;
   const matchDetails = location.state?.matchDetails;
-  const ouid = location.state?.ouid;
   const division = location.state?.division;
 
   useEffect(() => {
-
-
-    
     const divisionData = DIVISION_DATAS.find(
       (divisionData) => divisionData.divisionId === division
     );
     setDivisionInfo(divisionData);
   }, [division]);
+
   let cleanDivisionName = divisionInfo?.divisionName;
 
   // 숫자가 있는 경우에만 숫자를 제거
   if (/\d+/.test(cleanDivisionName)) {
     cleanDivisionName = cleanDivisionName.replace(/\d+/g, '');
   }
+  const matchname = matchDetails.find(
+    (match) => match.MatchTeam === division
+  );
 
 
-  
   return (
-    <CardWarp>
-      <MatchResultbar />
-      <MatchCardLeft>
-        <MatchResultText>패배</MatchResultText>
-        <MatchTypeText>공식경기</MatchTypeText>
-        <MatchDivisionText>{cleanDivisionName} 구간</MatchDivisionText>
-        <MatchDateTime>3시간 전</MatchDateTime>
-      </MatchCardLeft>
-      <MatchCarduser>
-        <MatchTeam>{UserName}</MatchTeam>
-        <MatchVS>VS</MatchVS>
-        <MatchTeam>코어플라넷</MatchTeam>
-      </MatchCarduser>
-      <MatchView>
-        <MatchInfoLink href="#">
-          <i className="fas fa-arrow-right"></i>
-        </MatchInfoLink>
-      </MatchView>
-    </CardWarp>
+    <>
+      {matchDetails.map((match, index) => (
+        <CardWarp key={index} style={{ backgroundColor: match?.matchInfo[0]?.matchDetail?.matchResult === '승' ? '#4a76a3' : '#692525' }}>
+          <MatchResultbar key={index} style={{ backgroundColor: match?.matchInfo[0]?.matchDetail?.matchResult === '승' ? '#3d8ddf' : '#b93a3a' }} />
+          <MatchCardLeft>
+            <MatchResultText>{match?.matchInfo[0]?.matchDetail?.matchResult || '결과 없음'}</MatchResultText>
+            <MatchTypeText>공식경기</MatchTypeText>
+            <MatchDivisionText>{cleanDivisionName} 구간</MatchDivisionText>
+            <MatchDateTime>{match?.matchDate || '날짜 없음'}</MatchDateTime>
+          </MatchCardLeft>
+          <MatchCarduser>
+            <MatchTeam>{UserName}</MatchTeam>
+            <MatchVS style={{ backgroundColor: match?.matchInfo[0]?.matchDetail?.matchResult === '승' ? '#4a76a3' : '#692525', color: match?.matchInfo[0]?.matchDetail?.matchResult === '승' ? '#FFF' : '#ed6767' }}>VS</MatchVS>
+            <MatchTeam>
+              {match?.matchInfo[0]?.nickname === UserName
+                ? match?.matchInfo[1]?.nickname || '상대팀 없음'
+                : match?.matchInfo[0]?.nickname || '상대팀 없음'}
+            </MatchTeam>
+          </MatchCarduser>
+          <MatchView>
+            <MatchInfoLink href="#">
+              <i className="fas fa-arrow-right"></i>
+            </MatchInfoLink>
+          </MatchView>
+        </CardWarp>
+      ))}
+    </>
   );
 }
-
 export default MatchHistoryCard;
