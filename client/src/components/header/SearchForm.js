@@ -90,7 +90,10 @@ function SearchForm() {
       }
     }
   };
-
+  const handleNicknameClick = (nickname) => {
+    setInputValue(nickname);
+    // 추가적인 로직이 필요한 경우 여기에 작성합니다.
+  };
   return (
     <FormContainer onSubmit={handleSubmit}>
       <Input

@@ -106,7 +106,7 @@ function UserInfo() {
   const [divisionnamedata, setDivisionnameData] = useState(""); // 추가
   const [divisionInfo, setDivisionInfo] = useState({}); // 추가
 
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(11);
   const [historyMatches, setHistoryMatches] = useState([]); // 새로운 상태 추가
   const [limit, setmatchlimit] = useState("");
 
@@ -118,7 +118,8 @@ function UserInfo() {
   const setUmatchType = location.state?.matchType;
   const setdivision = location.state?.division;
   const nickname = location.state?.nickname;
-  const [matchDetails, setMatchDetails] = useState([]); // 새로운 상태 추가
+  const initialMatchDetails = location.state?.matchDetails || [];
+  const [matchDetails, setMatchDetails] = useState(initialMatchDetails); // 새로운 상태 추가
   const TestURl = "http://localhost:8080/api/userinfo/getuserinfo";
   const ServiceURL =
     "https://fconline-node-xwgh.vercel.app/api/userinfo/getuserinfo";
@@ -137,11 +138,9 @@ function UserInfo() {
       message: nickname,
       currentIndex: currentIndex,
     });
-  
-    // response.data.data 대신 response.data를 사용
-    setHistoryMatches((prevMatches) => [prevMatches, response.data]); // 또는 실제 데이터 위치에 맞게 수정
-    console.log(response.data);
-    
+  const {matchDetails : newMatchDetails} =response?.data
+
+    setMatchDetails((prevMatches) => [...prevMatches, ...newMatchDetails]); 
 
     setCurrentIndex(currentIndex + 11);
   };
@@ -173,7 +172,7 @@ function UserInfo() {
           </UserInfoArea>
         </CardWarp>
         <MatchTitle>최근 히스토리</MatchTitle>
-        <MatchHistoryCard matchDetailsProp={historyMatches} />
+        <MatchHistoryCard matchDetails={matchDetails} onChangeMatchDetails={setMatchDetails} />
         <OtherBtn data-index="1" onClick={handleLoadMore}>
           더보기
         </OtherBtn>

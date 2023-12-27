@@ -112,114 +112,143 @@ const MatchInfoLink = styled.a`
   justify-content: center;
 `;
 
-function MatchHistoryCard({ matchDetailsProp, onHistoryMatchesUpdate }) {
+function MatchHistoryCard({ matchDetails, onChangeMatchDetails }) {
   const [divisionInfo, setDivisionInfo] = useState({});
   const location = useLocation();
   const UserName = location.state?.UserName;
-  const matchDetails = location.state?.matchDetails || [];
-  const [historyMatches, setHistoryMatches] = useState([]); // 새로운 상태 추가
-  const division = location.state?.division;
-  
+  const [division, setDivision] = useState(location.state?.division);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
-  
   useEffect(() => {
     const divisionData = DIVISION_DATAS.find(
       (divisionData) => divisionData.divisionId === division
     );
-    console.log("matchDetails가 변경되었습니다:", matchDetailsProp);
     setDivisionInfo(divisionData);
-    
-  
-  }, [division, matchDetailsProp]);  // matchDetailsProp을 의존성 배열에 추가
-  
-  useEffect(() => {
-    // matchDetails 상태가 변경될 때마다 historyMatches를 업데이트
-    setHistoryMatches(matchDetails);
-  }, [matchDetails]);
+  }, [division]);
 
   let cleanDivisionName = divisionInfo?.divisionName;
 
-  // 숫자가 있는 경우에만 숫자를 제거
   if (/\d+/.test(cleanDivisionName)) {
     cleanDivisionName = cleanDivisionName.replace(/\d+/g, "");
+  }
+  const handleLoadMore = async () => {
+
+    
+
+    console.log('newDataArray') //왜 이거 안보이죠/
+    setCurrentIndex(currentIndex + 11);
+  };
+
+
+  function formatDateTime(dateTimeString) {
+    const currentDate = new Date();
+    const targetDate = new Date(dateTimeString);
+    const timeDiff = currentDate - targetDate;
+  
+    const seconds = Math.floor(timeDiff / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+  
+    if (seconds < 60) {
+      return `${seconds}초 전`;
+    } else if (minutes < 60) {
+      return `${minutes}분 전`;
+    } else if (hours < 24) {
+      return `${hours}시간 전`;
+    } else if (days < 7) {
+      return `${days}일 전`;
+    } else {
+      return targetDate.toLocaleString(); // 일주일 이상이면 원래의 날짜 형식으로 표시
+    }
   }
 
   return (
     <>
-      {historyMatches.map((match, index) => (
-        <CardWarp
-          key={index}
-          style={{
-            backgroundColor:
-              match?.matchInfo[0]?.matchDetail?.matchResult === "승"
-                ? "#232b41"
-                : "#3b2020",
-          }}
-        >
-          <MatchResultbar
+      {matchDetails.length === 0 ? (
+        <div>
+          <p>No match details available.</p>
+        </div>
+      ) : (
+        matchDetails?.map((match, index) => (
+          <CardWarp
             key={index}
             style={{
               backgroundColor:
                 match?.matchInfo[0]?.matchDetail?.matchResult === "승"
-                  ? "#3d8ddf"
-                  : "#b93a3a",
+                  ? "#232b41"
+                  : "#3b2020",
             }}
-          />
-          <MatchCardLeft>
-            <MatchResultText
-              style={{
-                color:
-                  match?.matchInfo[0]?.matchDetail?.matchResult === "승"
-                    ? "#7fc3ff"
-                    : "##ed6767",
-              }}
-            >
-            </MatchResultText>
-            <MatchTypeText>공식경기</MatchTypeText>
-            <MatchDivisionText>{cleanDivisionName} 구간</MatchDivisionText>
-            <MatchDateTime>{match?.matchDate || "날짜 없음"}</MatchDateTime>
-          </MatchCardLeft>
-          <MatchCarduser>
-            <MatchTeam>{UserName}</MatchTeam>
-            <MatchVS
+          >
+            <MatchResultbar
+              key={index}
               style={{
                 backgroundColor:
                   match?.matchInfo[0]?.matchDetail?.matchResult === "승"
-                    ? "#36436f"
-                    : "#692525",
-                color:
-                  match?.matchInfo[0]?.matchDetail?.matchResult === "승"
-                    ? "#7fc3ff"
-                    : "##ed6767",
+                    ? "#3d8ddf"
+                    : "#b93a3a",
               }}
-            >
-              VS
-            </MatchVS>
-            <MatchTeam>
-              {match?.matchInfo[0]?.nickname === UserName
-                ? match?.matchInfo[1]?.nickname || "상대팀 없음"
-                : match?.matchInfo[0]?.nickname || "상대팀 없음"}
-            </MatchTeam>
-          </MatchCarduser>
-          <MatchView>
-            <MatchInfoLink
-              href="#"
-              style={{
-                backgroundColor:
-                  match?.matchInfo[0]?.matchDetail?.matchResult === "승"
-                    ? "#36436f"
-                    : "#692525",
-                color:
-                  match?.matchInfo[0]?.matchDetail?.matchResult === "승"
-                    ? "#7fc3ff"
-                    : "##ed6767",
-              }}
-            >
-              <i className="fas fa-arrow-right"></i>
-            </MatchInfoLink>
-          </MatchView>
-        </CardWarp>
-      ))}
+            />
+            <MatchCardLeft>
+              <MatchResultText
+                style={{
+                  color:
+                    match?.matchInfo[0]?.matchDetail?.matchResult === "승"
+                      ? "#7fc3ff"
+                      : "##ed6767",
+                }}
+              >
+                {match?.matchInfo[0]?.matchDetail?.matchResult || "결 과 없음"}
+              </MatchResultText>
+              <MatchTypeText>공식경기</MatchTypeText>
+              <MatchDivisionText>{cleanDivisionName} 구간</MatchDivisionText>
+              <MatchDateTime>
+                {formatDateTime(match?.matchDate) || "날짜 없음"}
+              </MatchDateTime>
+            </MatchCardLeft>
+            <MatchCarduser>
+              <MatchTeam>{UserName}</MatchTeam>
+              <MatchVS
+                style={{
+                  backgroundColor:
+                    match?.matchInfo[0]?.matchDetail?.matchResult === "승"
+                      ? "#36436f"
+                      : "#692525",
+                  color:
+                    match?.matchInfo[0]?.matchDetail?.matchResult === "승"
+                      ? "#7fc3ff"
+                      : "##ed6767",
+                }}
+              >
+                VS
+              </MatchVS>
+              <MatchTeam>
+                {match?.matchInfo[0]?.nickname === UserName
+                  ? match?.matchInfo[1]?.nickname || "상대팀 없음"
+                  : match?.matchInfo[0]?.nickname || "상대팀 없음"}
+                  
+              </MatchTeam>
+            </MatchCarduser>
+            <MatchView>
+              <MatchInfoLink
+                href="#"
+                style={{
+                  backgroundColor:
+                    match?.matchInfo[0]?.matchDetail?.matchResult === "승"
+                      ? "#36436f"
+                      : "#692525",
+                  color:
+                    match?.matchInfo[0]?.matchDetail?.matchResult === "승"
+                      ? "#7fc3ff"
+                      : "##ed6767",
+                }}
+              >
+                <i className="fas fa-arrow-right"></i>
+              </MatchInfoLink>
+            </MatchView>
+          </CardWarp>
+        ))
+      )}
     </>
   );
 }
