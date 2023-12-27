@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
 
@@ -38,30 +38,29 @@ const Button = styled.button`
   font-size: 20px;
 `;
 
-function SearchForm() {
+function SearchForm({ handleNicknameClick }) {
+  const location = useLocation();
   const [inputValue, setInputValue] = useState("");
   const navigate = useNavigate();
   const [error, setError] = useState("");
   const TestURl = "http://localhost:8080/api/userinfo/getuserinfo";
   const ServiceURL =
     "https://fconline-node-xwgh.vercel.app/api/userinfo/getuserinfo";
-  const apiUrl = ServiceURL;
+  const apiUrl = TestURl;
 
   const handleInputChange = (event) => {
     setInputValue(event.target.value);
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-
+  const handleSubmit = async () => {
     if (!inputValue.trim()) return;
     try {
       const response = await axios.post(apiUrl, {
         message: inputValue,
       });
-
+  
       const serverData = response.data;
-
+  
       const {
         UserName,
         level,
@@ -72,10 +71,9 @@ function SearchForm() {
         achievementDate,
         matchDetails,
       } = serverData;
-
-      // console.log("Match Details:", matchDetails);
-
-      navigate("/userinfo", {
+  
+      // URL을 변경하면서 데이터도 함께 전달
+      navigate(`/userinfo?nickname=${encodeURIComponent(inputValue)}`, {
         state: { ...serverData, nickname: inputValue },
       });
     } catch (error) {
@@ -90,17 +88,26 @@ function SearchForm() {
       }
     }
   };
-  const handleNicknameClick = (nickname) => {
-    setInputValue(nickname);
-    // 추가적인 로직이 필요한 경우 여기에 작성합니다.
-  };
+  useEffect(() => {
+    // URL 파라미터 변경을 감지하고 검색 요청 수행
+    const urlSearchParams = new URLSearchParams(location.search);
+    const nicknameParam = urlSearchParams.get("nickname");
+  
+    if (nicknameParam && inputValue !== nicknameParam) {
+      setInputValue(nicknameParam);
+      handleSubmit();
+    }
+  }, [location.search, inputValue]); // inputValue를 의존성 배열에 추가
   return (
-    <FormContainer onSubmit={handleSubmit}>
+<FormContainer onSubmit={(e) => {
+  e.preventDefault();
+  handleSubmit();
+}}>
       <Input
         type="text"
         placeholder="구단주명 입력"
         value={inputValue}
-        onChange={(e) => setInputValue(e.target.value)}
+        onChange={handleInputChange}
       />
       <Button type="submit">
         <i className="fas fa-search"></i>
