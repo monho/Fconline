@@ -3,7 +3,7 @@ import axios from "axios";
 import styled from "styled-components";
 import SearchForm from "../header/SearchForm";
 import { BaseApiUrl, headers } from "../../apibase/Baseinfo";
-import { useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import divisionData from "./division";
 import MatchHistoryCard from "./MatchHistory";
 import DIVISION_DATAS from "./division";
@@ -100,6 +100,8 @@ const OtherBtn = styled.button`
   cursor: pointer;
 `;
 function UserInfo() {
+
+  
   const [userInfo, setUserInfo] = useState("");
   const [usermaxdivisionInfo, setUsermaxdivisionInfo] = useState("");
   const [divisionImgData, setDivisionImgData] = useState(""); // 추가
@@ -123,7 +125,7 @@ function UserInfo() {
   const TestURl = "http://localhost:8080/api/userinfo/getuserinfo";
   const ServiceURL =
     "https://fconline-node-xwgh.vercel.app/api/userinfo/getuserinfo";
-
+    const navigate = useNavigate();
   useEffect(() => {
     if (!setdivision) return;
     const divisionData = DIVISION_DATAS.find(
@@ -133,18 +135,36 @@ function UserInfo() {
   }, [setdivision]);
 
   const handleLoadMore = async () => {
-    const apiUrl = "https://fconline-node-xwgh.vercel.app/api/userinfo/getuserinfo";
-    const response = await axios.post(apiUrl, {
-      message: nickname,
-      currentIndex: currentIndex,
-    });
-  const {matchDetails : newMatchDetails} =response?.data
-
-    setMatchDetails((prevMatches) => [...prevMatches, ...newMatchDetails]); 
-
-    setCurrentIndex(currentIndex + 11);
+    const apiUrl = TestURl;
+    try {
+      const response = await axios.post(apiUrl, null, {
+        params: { nickname: nickname, currentIndex: currentIndex },
+      });
+  
+      const { matchDetails: newMatchDetails } = response?.data;
+  
+      setMatchDetails((prevMatches) => [...prevMatches, ...newMatchDetails]);
+  
+      setCurrentIndex(currentIndex + 11);
+    } catch (error) {
+      console.error("데이터를 더 로드하는 중 에러 발생:", error);
+    }
   };
+  const handleNicknameClick = (nickname) => {
+    // 처리 로직 작성
+    
+    console.log(`Clicked on nickname: ${nickname}`);
+  };
+  useEffect(() => {
+    const urlSearchParams = new URLSearchParams(location.search);
+    const nicknameParam = urlSearchParams.get("nickname");
 
+    if (nicknameParam && nicknameParam !== nickname) {
+      // URL 파라미터의 닉네임이 현재 상태의 닉네임과 다를 경우에만 요청
+      // 이 부분은 필요에 따라 API 호출 로직을 추가하면 됩니다.
+      console.log(`New nickname from URL: ${nicknameParam}`);
+    }
+  }, [location.search, nickname]);
 
   
   useEffect(() => {
@@ -172,7 +192,7 @@ function UserInfo() {
           </UserInfoArea>
         </CardWarp>
         <MatchTitle>최근 히스토리</MatchTitle>
-        <MatchHistoryCard matchDetails={matchDetails} onChangeMatchDetails={setMatchDetails} />
+        <MatchHistoryCard matchDetails={matchDetails} onChangeMatchDetails={setMatchDetails}     handleNicknameClick={handleNicknameClick}/>
         <OtherBtn data-index="1" onClick={handleLoadMore}>
           더보기
         </OtherBtn>
