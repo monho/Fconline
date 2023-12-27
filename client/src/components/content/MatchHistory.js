@@ -142,6 +142,9 @@ function MatchHistoryCard({ matchDetails, onChangeMatchDetails }) {
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> parent of 11f8bbd (api)
+=======
 >>>>>>> parent of 11f8bbd (api)
 =======
 >>>>>>> parent of 11f8bbd (api)
@@ -237,6 +240,10 @@ function MatchHistoryCard({ matchDetails, onChangeMatchDetails }) {
               <MatchInfoLink
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+                href="#"
+>>>>>>> parent of 11f8bbd (api)
 =======
                 href="#"
 >>>>>>> parent of 11f8bbd (api)

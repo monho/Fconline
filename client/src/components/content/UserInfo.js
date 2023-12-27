@@ -125,7 +125,11 @@ function UserInfo() {
     "https://fconline-node-xwgh.vercel.app/api/userinfo/getuserinfo";
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   const navigate = useNavigate();
+=======
+
+>>>>>>> parent of 11f8bbd (api)
 =======
 
 >>>>>>> parent of 11f8bbd (api)
@@ -141,6 +145,7 @@ function UserInfo() {
   }, [setdivision]);
 
   const handleLoadMore = async () => {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
     const apiUrl = TestURl;
@@ -169,6 +174,8 @@ function UserInfo() {
 =======
 =======
 >>>>>>> parent of 11f8bbd (api)
+=======
+>>>>>>> parent of 11f8bbd (api)
     const apiUrl = "https://fconline-node-xwgh.vercel.app/api/userinfo/getuserinfo";
     const response = await axios.post(apiUrl, {
       message: nickname,
@@ -181,6 +188,9 @@ function UserInfo() {
     setCurrentIndex(currentIndex + 11);
   };
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> parent of 11f8bbd (api)
+=======
 >>>>>>> parent of 11f8bbd (api)
 =======
 >>>>>>> parent of 11f8bbd (api)
@@ -213,10 +223,14 @@ function UserInfo() {
         <MatchTitle>최근 히스토리</MatchTitle>
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         <MatchHistoryCard
           matchDetails={matchDetails}
           onChangeMatchDetails={setMatchDetails}
         />
+=======
+        <MatchHistoryCard matchDetails={matchDetails} onChangeMatchDetails={setMatchDetails} />
+>>>>>>> parent of 11f8bbd (api)
 =======
         <MatchHistoryCard matchDetails={matchDetails} onChangeMatchDetails={setMatchDetails} />
 >>>>>>> parent of 11f8bbd (api)
