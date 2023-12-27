@@ -107,7 +107,7 @@ function UserInfo() {
   const [divisionInfo, setDivisionInfo] = useState({}); // 추가
 
   const [currentIndex, setCurrentIndex] = useState(0);
-
+  const [historyMatches, setHistoryMatches] = useState([]); // 새로운 상태 추가
   const [limit, setmatchlimit] = useState("");
 
   const location = useLocation();
@@ -131,19 +131,23 @@ function UserInfo() {
     setDivisionInfo(divisionData);
   }, [setdivision]);
 
-  const handleLoadMore = async (event) => {
-    const apiUrl = ServiceURL;
+  const handleLoadMore = async () => {
+    const apiUrl = "https://fconline-node-xwgh.vercel.app/api/userinfo/getuserinfo";
     const response = await axios.post(apiUrl, {
       message: nickname,
       currentIndex: currentIndex,
     });
+  
+    // response.data.data 대신 response.data를 사용
+    setHistoryMatches((prevMatches) => [prevMatches, response.data]); // 또는 실제 데이터 위치에 맞게 수정
+    console.log(response.data);
+    
 
-    setMatchDetails(response.data);
-
-    // currentIndex 상태를 업데이트하여 리렌더링을 유발
     setCurrentIndex(currentIndex + 11);
   };
 
+
+  
   useEffect(() => {
     // 컴포넌트가 처음 로드될 때 한 번 실행
   }, []); // 빈 배열을 전달하여 의존성 배열이 비어있으므로 한 번만 실행
@@ -169,7 +173,7 @@ function UserInfo() {
           </UserInfoArea>
         </CardWarp>
         <MatchTitle>최근 히스토리</MatchTitle>
-        <MatchHistoryCard matchDetails={matchDetails} />
+        <MatchHistoryCard matchDetailsProp={historyMatches} />
         <OtherBtn data-index="1" onClick={handleLoadMore}>
           더보기
         </OtherBtn>

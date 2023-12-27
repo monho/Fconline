@@ -116,21 +116,26 @@ function MatchHistoryCard({ matchDetailsProp, onHistoryMatchesUpdate }) {
   const [divisionInfo, setDivisionInfo] = useState({});
   const location = useLocation();
   const UserName = location.state?.UserName;
-  const matchDetails = location.state?.matchDetails;
+  const matchDetails = location.state?.matchDetails || [];
   const [historyMatches, setHistoryMatches] = useState([]); // 새로운 상태 추가
   const division = location.state?.division;
+  
 
-  useEffect(
-    () => {
-      const divisionData = DIVISION_DATAS.find(
-        (divisionData) => divisionData.divisionId === division
-      );
-      console.log("matchDetails가 변경되었습니다:", matchDetails);
-      setDivisionInfo(divisionData);
-    },
-    [division],
-    [matchDetails]
-  );
+  
+  useEffect(() => {
+    const divisionData = DIVISION_DATAS.find(
+      (divisionData) => divisionData.divisionId === division
+    );
+    console.log("matchDetails가 변경되었습니다:", matchDetailsProp);
+    setDivisionInfo(divisionData);
+    
+  
+  }, [division, matchDetailsProp]);  // matchDetailsProp을 의존성 배열에 추가
+  
+  useEffect(() => {
+    // matchDetails 상태가 변경될 때마다 historyMatches를 업데이트
+    setHistoryMatches(matchDetails);
+  }, [matchDetails]);
 
   let cleanDivisionName = divisionInfo?.divisionName;
 
@@ -141,7 +146,7 @@ function MatchHistoryCard({ matchDetailsProp, onHistoryMatchesUpdate }) {
 
   return (
     <>
-      {matchDetails.map((match, index) => (
+      {historyMatches.map((match, index) => (
         <CardWarp
           key={index}
           style={{
@@ -169,7 +174,6 @@ function MatchHistoryCard({ matchDetailsProp, onHistoryMatchesUpdate }) {
                     : "##ed6767",
               }}
             >
-              {match?.matchInfo[0]?.matchDetail?.matchResult || "결과 없음"}
             </MatchResultText>
             <MatchTypeText>공식경기</MatchTypeText>
             <MatchDivisionText>{cleanDivisionName} 구간</MatchDivisionText>
