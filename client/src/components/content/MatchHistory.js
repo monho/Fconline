@@ -141,6 +141,9 @@ function MatchHistoryCard({ matchDetails, onChangeMatchDetails }) {
   };
 
 
+<<<<<<< HEAD
+>>>>>>> parent of 11f8bbd (api)
+=======
 >>>>>>> parent of 11f8bbd (api)
   function formatDateTime(dateTimeString) {
     const currentDate = new Date();
@@ -233,6 +236,10 @@ function MatchHistoryCard({ matchDetails, onChangeMatchDetails }) {
             <MatchView>
               <MatchInfoLink
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+                href="#"
+>>>>>>> parent of 11f8bbd (api)
 =======
                 href="#"
 >>>>>>> parent of 11f8bbd (api)
