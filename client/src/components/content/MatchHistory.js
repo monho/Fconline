@@ -129,7 +129,6 @@ function MatchHistoryCard({ matchDetails, onChangeMatchDetails }) {
   const UserName = location.state?.UserName;
   const [division, setDivision] = useState(location.state?.division);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isDropdownVisible, setDropdownVisible] = useState(false);
 
   useEffect(() => {
     const divisionData = DIVISION_DATAS.find(
@@ -143,29 +142,17 @@ function MatchHistoryCard({ matchDetails, onChangeMatchDetails }) {
   if (/\d+/.test(cleanDivisionName)) {
     cleanDivisionName = cleanDivisionName.replace(/\d+/g, "");
   }
-  const handleLoadMore = async () => {
 
-    
-
-    console.log('newDataArray') //왜 이거 안보이죠/
-    setCurrentIndex(currentIndex + 11);
-  };
-
-  function handleDropdownClick() {
-    setDropdownVisible(!isDropdownVisible);
-  }
-
-  
   function formatDateTime(dateTimeString) {
     const currentDate = new Date();
     const targetDate = new Date(dateTimeString);
     const timeDiff = currentDate - targetDate;
-  
+
     const seconds = Math.floor(timeDiff / 1000);
     const minutes = Math.floor(seconds / 60);
     const hours = Math.floor(minutes / 60);
     const days = Math.floor(hours / 24);
-  
+
     if (seconds < 60) {
       return `${seconds}초 전`;
     } else if (minutes < 60) {
@@ -242,12 +229,10 @@ function MatchHistoryCard({ matchDetails, onChangeMatchDetails }) {
                 {match?.matchInfo[0]?.nickname === UserName
                   ? match?.matchInfo[1]?.nickname || "상대팀 없음"
                   : match?.matchInfo[0]?.nickname || "상대팀 없음"}
-                  
               </MatchTeam>
             </MatchCarduser>
             <MatchView>
-            <MatchInfoLink
-                onClick={handleDropdownClick}
+              <MatchInfoLink
                 style={{
                   backgroundColor:
                     match?.matchInfo[0]?.matchDetail?.matchResult === "승"
@@ -261,16 +246,7 @@ function MatchHistoryCard({ matchDetails, onChangeMatchDetails }) {
               >
                 <i className="fas fa-arrow-right"></i>
               </MatchInfoLink>
-              <Dropdown isDropdownVisible={isDropdownVisible}>
-                {/* 드롭다운 내용 */}
-                <div>
-                  <p>Match Date: {formatDateTime(match?.matchDate) || "날짜 없음"}</p>
-                  <p>Result: {match?.matchInfo[0]?.matchDetail?.matchResult || "결 과 없음"}</p>
-                  {/* 기타 정보 추가 */}
-                </div>
-              </Dropdown>
             </MatchView>
-
           </CardWarp>
         ))
       )}
