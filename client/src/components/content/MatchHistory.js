@@ -111,18 +111,7 @@ const MatchInfoLink = styled.a`
   height: 100%;
   justify-content: center;
 `;
-const Dropdown = styled.div`
-  position: absolute;
-  top: 100%;
-  left: 0;
-  background-color: #36436f;
-  color: #7fc3ff;
-  padding: 10px;
-  display: none;
-  ${MatchInfoLink}:hover & {
-    display: block;
-  }
-`;
+
 function MatchHistoryCard({ matchDetails, onChangeMatchDetails }) {
   const [divisionInfo, setDivisionInfo] = useState({});
   const location = useLocation();
@@ -143,6 +132,16 @@ function MatchHistoryCard({ matchDetails, onChangeMatchDetails }) {
     cleanDivisionName = cleanDivisionName.replace(/\d+/g, "");
   }
 
+<<<<<<< HEAD
+=======
+    
+
+    console.log('newDataArray') //왜 이거 안보이죠/
+    setCurrentIndex(currentIndex + 11);
+  };
+
+
+>>>>>>> parent of 11f8bbd (api)
   function formatDateTime(dateTimeString) {
     const currentDate = new Date();
     const targetDate = new Date(dateTimeString);
@@ -233,6 +232,10 @@ function MatchHistoryCard({ matchDetails, onChangeMatchDetails }) {
             </MatchCarduser>
             <MatchView>
               <MatchInfoLink
+<<<<<<< HEAD
+=======
+                href="#"
+>>>>>>> parent of 11f8bbd (api)
                 style={{
                   backgroundColor:
                     match?.matchInfo[0]?.matchDetail?.matchResult === "승"
