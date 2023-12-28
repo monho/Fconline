@@ -5,7 +5,7 @@ import SearchForm from "../header/SearchForm";
 import { BaseApiUrl, headers } from "../../apibase/Baseinfo";
 import { useNavigate, useLocation } from "react-router-dom";
 import divisionData from "./division";
-
+import queryString from 'query-string';
 import MatchHistoryCard from "./MatchHistory";
 import DIVISION_DATAS from "./division";
 const Warp = styled.div`
@@ -118,12 +118,20 @@ function UserInfo() {
   const setachievementDate = location.state?.achievementDate;
   const setUmatchType = location.state?.matchType;
   const setdivision = location.state?.division;
-  const nickname = location.state?.nickname;
+  //const nickname = location.state?.nickname;
   const initialMatchDetails = location.state?.matchDetails || [];
   const [matchDetails, setMatchDetails] = useState(initialMatchDetails); // 새로운 상태 추가
   const TestURl = "http://localhost:8080/api/userinfo/getuserinfo";
   const ServiceURL =
     "https://fconline-node-xwgh.vercel.app/api/userinfo/getuserinfo";
+
+
+
+    let nicksearch = queryString.parse(window.location.search);
+    console.log(nicksearch);
+    const nickname = nicksearch.nickname;
+    console.log(nickname)
+
   const navigate = useNavigate();
   useEffect(() => {
     if (!setdivision) return;
@@ -151,13 +159,13 @@ function UserInfo() {
     }
   };
   
-
+console.log(window.location.search);
 
 
   useEffect(() => {
+    handleLoadMore(nickname);
     // 컴포넌트가 처음 로드될 때 한 번 실행
   }, []); // 빈 배열을 전달하여 의존성 배열이 비어있으므로 한 번만 실행
-
   return (
     <>
       <Warp>

@@ -76,7 +76,7 @@ function SearchForm() {
       // console.log("Match Details:", matchDetails);
 
       navigate("/userinfo", {
-        state: { ...serverData, nickname: inputValue },
+        state: { ...serverData, nick: inputValue },
       });
     } catch (error) {
       if (
