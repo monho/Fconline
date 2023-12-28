@@ -155,16 +155,7 @@ function UserInfo() {
     
     console.log(`Clicked on nickname: ${nickname}`);
   };
-  useEffect(() => {
-    const urlSearchParams = new URLSearchParams(location.search);
-    const nicknameParam = urlSearchParams.get("nickname");
 
-    if (nicknameParam && nicknameParam !== nickname) {
-      // URL 파라미터의 닉네임이 현재 상태의 닉네임과 다를 경우에만 요청
-      // 이 부분은 필요에 따라 API 호출 로직을 추가하면 됩니다.
-      console.log(`New nickname from URL: ${nicknameParam}`);
-    }
-  }, [location.search, nickname]);
 
   
   useEffect(() => {
