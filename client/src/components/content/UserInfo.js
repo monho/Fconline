@@ -5,6 +5,7 @@ import SearchForm from "../header/SearchForm";
 import { BaseApiUrl, headers } from "../../apibase/Baseinfo";
 import { useNavigate, useLocation } from "react-router-dom";
 import divisionData from "./division";
+
 import MatchHistoryCard from "./MatchHistory";
 import DIVISION_DATAS from "./division";
 const Warp = styled.div`
@@ -149,11 +150,8 @@ function UserInfo() {
       console.error("데이터를 더 로드하는 중 에러 발생:", error);
     }
   };
-  const handleNicknameClick = (nickname) => {
-    // 처리 로직 작성
+  
 
-    console.log(`Clicked on nickname: ${nickname}`);
-  };
 
 
   useEffect(() => {
