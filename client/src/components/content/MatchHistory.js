@@ -144,10 +144,7 @@ function MatchHistoryCard({ matchDetails, onChangeMatchDetails }) {
     cleanDivisionName = cleanDivisionName.replace(/\d+/g, "");
   }
   const handleLoadMore = async () => {
-
-    
-
-    console.log('newDataArray') //왜 이거 안보이죠/
+    console.log("newDataArray"); //왜 이거 안보이죠/
     setCurrentIndex(currentIndex + 11);
   };
 
@@ -155,17 +152,16 @@ function MatchHistoryCard({ matchDetails, onChangeMatchDetails }) {
     setDropdownVisible(!isDropdownVisible);
   }
 
-  
   function formatDateTime(dateTimeString) {
     const currentDate = new Date();
     const targetDate = new Date(dateTimeString);
     const timeDiff = currentDate - targetDate;
-  
+
     const seconds = Math.floor(timeDiff / 1000);
     const minutes = Math.floor(seconds / 60);
     const hours = Math.floor(minutes / 60);
     const days = Math.floor(hours / 24);
-  
+
     if (seconds < 60) {
       return `${seconds}초 전`;
     } else if (minutes < 60) {
@@ -242,11 +238,10 @@ function MatchHistoryCard({ matchDetails, onChangeMatchDetails }) {
                 {match?.matchInfo[0]?.nickname === UserName
                   ? match?.matchInfo[1]?.nickname || "상대팀 없음"
                   : match?.matchInfo[0]?.nickname || "상대팀 없음"}
-                  
               </MatchTeam>
             </MatchCarduser>
             <MatchView>
-            <MatchInfoLink
+              <MatchInfoLink
                 onClick={handleDropdownClick}
                 style={{
                   backgroundColor:
@@ -264,13 +259,19 @@ function MatchHistoryCard({ matchDetails, onChangeMatchDetails }) {
               <Dropdown isDropdownVisible={isDropdownVisible}>
                 {/* 드롭다운 내용 */}
                 <div>
-                  <p>Match Date: {formatDateTime(match?.matchDate) || "날짜 없음"}</p>
-                  <p>Result: {match?.matchInfo[0]?.matchDetail?.matchResult || "결 과 없음"}</p>
+                  <p>
+                    Match Date:{" "}
+                    {formatDateTime(match?.matchDate) || "날짜 없음"}
+                  </p>
+                  <p>
+                    Result:{" "}
+                    {match?.matchInfo[0]?.matchDetail?.matchResult ||
+                      "결 과 없음"}
+                  </p>
                   {/* 기타 정보 추가 */}
                 </div>
               </Dropdown>
             </MatchView>
-
           </CardWarp>
         ))
       )}

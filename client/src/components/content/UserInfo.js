@@ -100,8 +100,6 @@ const OtherBtn = styled.button`
   cursor: pointer;
 `;
 function UserInfo() {
-
-  
   const [userInfo, setUserInfo] = useState("");
   const [usermaxdivisionInfo, setUsermaxdivisionInfo] = useState("");
   const [divisionImgData, setDivisionImgData] = useState(""); // 추가
@@ -125,7 +123,7 @@ function UserInfo() {
   const TestURl = "http://localhost:8080/api/userinfo/getuserinfo";
   const ServiceURL =
     "https://fconline-node-xwgh.vercel.app/api/userinfo/getuserinfo";
-    const navigate = useNavigate();
+  const navigate = useNavigate();
   useEffect(() => {
     if (!setdivision) return;
     const divisionData = DIVISION_DATAS.find(
@@ -137,14 +135,15 @@ function UserInfo() {
   const handleLoadMore = async () => {
     const apiUrl = TestURl;
     try {
-      const response = await axios.post(apiUrl, null, {
-        params: { nickname: nickname, currentIndex: currentIndex },
+      const response = await axios.post(apiUrl, {
+        message: nickname,
+        currentIndex: currentIndex,
       });
-  
+
       const { matchDetails: newMatchDetails } = response?.data;
-  
+
       setMatchDetails((prevMatches) => [...prevMatches, ...newMatchDetails]);
-  
+
       setCurrentIndex(currentIndex + 11);
     } catch (error) {
       console.error("데이터를 더 로드하는 중 에러 발생:", error);
@@ -152,12 +151,11 @@ function UserInfo() {
   };
   const handleNicknameClick = (nickname) => {
     // 처리 로직 작성
-    
+
     console.log(`Clicked on nickname: ${nickname}`);
   };
 
 
-  
   useEffect(() => {
     // 컴포넌트가 처음 로드될 때 한 번 실행
   }, []); // 빈 배열을 전달하여 의존성 배열이 비어있으므로 한 번만 실행
@@ -183,7 +181,10 @@ function UserInfo() {
           </UserInfoArea>
         </CardWarp>
         <MatchTitle>최근 히스토리</MatchTitle>
-        <MatchHistoryCard matchDetails={matchDetails} onChangeMatchDetails={setMatchDetails}     handleNicknameClick={handleNicknameClick}/>
+        <MatchHistoryCard
+          matchDetails={matchDetails}
+          onChangeMatchDetails={setMatchDetails}
+        />
         <OtherBtn data-index="1" onClick={handleLoadMore}>
           더보기
         </OtherBtn>
