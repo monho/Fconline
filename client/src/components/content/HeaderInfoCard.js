@@ -45,18 +45,6 @@ const UserLvlText = styled.div`
   padding: 4px;
 `;
 function HeaderInfoCard() {
-  const [userOuid, setUserInfo] = useState("");
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-
-    const response = await axios.get(
-      BaseApiUrl.baseURL + "fconline/v1/user/basic=" + SearchForm.setUserOuid,
-      { headers }
-    );
-    setUserInfo(response.data);
-  };
-
   return (
     <CardWarp>
       <TierImage>
