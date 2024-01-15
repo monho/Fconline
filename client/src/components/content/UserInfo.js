@@ -119,23 +119,6 @@ function UserInfo() {
     setDivisionInfo(divisionData);
   }, [setdivision]);
 
-  const handleLoadMore = async () => {
-    const apiUrl = "http://localhost:8080/api/userinfo/getuserinfo";
-    try {
-      const response = await axios.post(apiUrl, {
-        message: queryString.parse(window.location.search).nickname,
-        currentIndex: currentIndex,
-      });
-
-      const { matchDetails: newMatchDetails } = response?.data;
-
-      setMatchDetails((prevMatches) => [...prevMatches, ...newMatchDetails]);
-
-      setCurrentIndex((prevIndex) => prevIndex + 11);
-    } catch (error) {
-      console.error("데이터를 더 로드하는 중 에러 발생:", error);
-    }
-  };
   const handleLoadMore2 = async () => {
     const apiUrl = "http://localhost:8080/api/userinfo/getuserinfo";
     try {

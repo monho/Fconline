@@ -39,68 +39,42 @@ const Button = styled.button`
 `;
 
 function SearchForm() {
-  const [inputValue, setInputValue] = useState("");
+  const [nickname, setNickname] = useState("");
   const navigate = useNavigate();
-  const [error, setError] = useState("");
-  const TestURl = "http://localhost:8080/api/userinfo/getuserinfo";
-  const ServiceURL =
-    "https://fconline-node-xwgh.vercel.app/api/userinfo/getuserinfo";
-  const apiUrl = ServiceURL;
+  // useHistory 대신에 useNavigate를 사용
 
-  const handleInputChange = (event) => {
-    setInputValue(event.target.value);
-  };
+  const APi_URL_Test = "http://localhost:8080/";
 
-  const handleSubmit = async (event) => {
+  const handleSearch = async (event) => {
     event.preventDefault();
 
-    if (!inputValue.trim()) return;
     try {
-      const response = await axios.post(apiUrl, {
-        message: inputValue,
-      });
+      const response = await axios.get(
+        APi_URL_Test + `api/getuserinfo/getuserinfo?nickname=${nickname}`
+      );
 
       const serverData = response.data;
 
-      const {
-        UserName,
-        level,
-        ouid,
-        maxDivision,
-        matchType,
-        division,
-        achievementDate,
-        matchDetails,
-      } = serverData;
+      const { UserName, level, ouid, maxDivision, matchType, division } =
+        serverData;
 
       // console.log("Match Details:", matchDetails);
-
       navigate("/userinfo", {
-        state: { ...serverData, nick: inputValue },
+        state: { ...serverData, nick: nickname },
       });
     } catch (error) {
-      if (
-        error.response &&
-        error.response.data &&
-        error.response.data.errorCode
-      ) {
-        setError(`API 오류: ${error.response.data.errorCode}`);
-      } else {
-        setError("알 수 없는 오류가 발생했습니다.");
-      }
+      console.error("에러:", error);
+      // 에러 처리 로직 추가
     }
   };
-  const handleNicknameClick = (nickname) => {
-    setInputValue(nickname);
-    // 추가적인 로직이 필요한 경우 여기에 작성합니다.
-  };
+
   return (
-    <FormContainer onSubmit={handleSubmit}>
+    <FormContainer onSubmit={handleSearch}>
       <Input
         type="text"
         placeholder="구단주명 입력"
-        value={inputValue}
-        onChange={(e) => setInputValue(e.target.value)}
+        value={nickname}
+        onChange={(e) => setNickname(e.target.value)}
       />
       <Button type="submit">
         <i className="fas fa-search"></i>
